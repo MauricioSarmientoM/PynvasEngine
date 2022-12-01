@@ -1,6 +1,7 @@
-from Scripts.Essencial import GameObject
+from Core.Essencial import GameObject
 from Scripts.Shinobi import Shinobi, Uchiha, Uzumaki, Otsutsuki
-from Scripts.UI import Text, Button, Image, CharacterData, BattleUI
+from Core.UI import Text, Button, Image
+from Scripts.SCUI import CharacterData, BattleUI
 from Scripts.StateManager import StateManager
 from typing import Union
 from pygame import Vector2

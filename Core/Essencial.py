@@ -2,7 +2,12 @@ from pygame import image, Rect, Vector2, transform, Surface
 from pygame.sprite import Sprite, AbstractGroup
 from typing import Union
 
-class SpriteRenderer(Sprite):
+class Component:
+    def __init__(self) -> None:
+        pass
+    def Update(self, *props) -> None: ...
+    
+class SpriteRenderer(Component, Sprite):
     def __init__(self, src : Union[str, list[str]] = '', size : Union[list[float], tuple[float, float], Vector2] = (0, 0), *groups: AbstractGroup) -> None:
         super().__init__(*groups)
         if len(src) > 0:
@@ -26,17 +31,18 @@ class SpriteRenderer(Sprite):
     def flipXYImage(self) -> Surface:
         return transform.flip(self.image, True, True)
 
-class Transform:
+class Transform(Component):
     def __init__(self, position : Union[list[float], tuple[float, float], Vector2]) -> None:
         self.left, self.top = position[0], position[1]
     @property
     def position(self) -> Vector2:
         return Vector2((self.left, self.top))
+        
+class Animator(Component):                     #This is what will be in charge on most details of animation and movement
+    def __init__(self, position: Union[list[float], tuple[float, float], Vector2] = (0, 0)) -> None:
+        super().__init__(position)
 
 class GameObject:
     def __init__(self, position : Union[list[float], tuple[float, float], Vector2] = (0, 0)) -> None:
         self.transform = Transform(position)
     def Update(self, *props): ...
-class Animator(GameObject):                     #This is what will be in charge on most details of animation and movement
-    def __init__(self, position: Union[list[float], tuple[float, float], Vector2] = (0, 0)) -> None:
-        super().__init__(position)

@@ -1,4 +1,4 @@
-from Scripts.Essencial import GameObject
+from Core.Essencial import GameObject
 from random import randint
 from pygame import Surface
 

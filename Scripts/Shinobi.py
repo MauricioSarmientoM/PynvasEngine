@@ -1,6 +1,6 @@
 from random import randint
-from Scripts.Essencial import SpriteRenderer, GameObject
-from Scripts.Mathf import Clamp
+from Core.Essencial import SpriteRenderer, GameObject
+from Core.Mathf import Clamp
 from math import ceil
 from typing import Union
 from pygame import image, Vector2
