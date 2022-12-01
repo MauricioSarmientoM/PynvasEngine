@@ -1,33 +1,14 @@
-from Core.Essencial import GameObject
 from Scripts.Shinobi import Shinobi, Uchiha, Uzumaki, Otsutsuki
-from Core.UI import Text, Button, Image
 from Scripts.SCUI import CharacterData, BattleUI
-from Scripts.StateManager import StateManager
-from typing import Union
 from pygame import Vector2
+from Core.Essencial import GameObject
+from Core.UI import Text, Button, Image
+from Core.SceneManager import SceneManager
 from sys import exit
 
-class SceneManager(GameObject):
-    def __init__(self, state : StateManager, position: Union[list[float], tuple[float, float], Vector2] = (0, 0)) -> None:
-        super().__init__(position)
-        self.scenesList = []
-        self.scene = []
-        self.state = state
-    def Update(self, *props):
-        for obj in self.scene:
-            obj.Update(self.state, self, *props)
-    def ChangeScene(self, index : int = 0):
-        self.scene = self.scenesList[index](self)
-        return self
-    def SetScene(self, scenes : list = []):
-        self.scenesList = scenes
-        return self
-    def AppendScene(self, scene):
-        self.scenesList.append(scene)
-        return self
 def MainMenu(scene : SceneManager) -> list[GameObject]:
     titlePos = Vector2(243, 250)
-    scene.state.SetDefault()
+    scene.children['state'].SetDefault()
     return [
         Image(src = './Sprites/Logo.png', position = (10, 0)),
         Text(color = (255, 255, 255), position = titlePos, text = 'Ultimate Ninja'),
@@ -41,7 +22,7 @@ def CharacterSelection(scene : SceneManager) -> list[GameObject]:
     showoffPos = Vector2(20, 300)
     def CharacterShowOff(character : Shinobi):
         scene.scene.pop(len(scene.scene) - 1)
-        scene.scene.append(CharacterData(character = character, state = scene.state))
+        scene.scene.append(CharacterData(character = character, state = scene.children['state']))
     return [
         Text(color = (255, 255, 0), position = (210, 20), text = 'Choose Your Fighter'),
         Button(position = (0, 0), size = (80, 40), text = 'Back', onClick = scene.ChangeScene, onClickProps = 0),

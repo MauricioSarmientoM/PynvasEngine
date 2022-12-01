@@ -1,11 +1,18 @@
 from typing import Union
 from pygame import Vector2
 
+class Matrix:
+    def __init__(self) -> None:
+        pass
+    @property
+    def determinant(self) -> float:
+        pass
+
 def Lerp(start : float, end : float, interpolation : float):        #Linear interpolation
     interpolation = Clamp(0, 1, interpolation)
     if interpolation == 0:
         return start
-    if interpolation == 1:
+    elif interpolation == 1:
         return end
     else:
         return (start + end) * interpolation
@@ -13,7 +20,7 @@ def Vector2Lerp(start : Union[tuple[float, float], list[float], Vector2], end : 
     interpolation = Clamp(0, 1, interpolation)
     if interpolation == 0:
         return start
-    if interpolation == 1:
+    elif interpolation == 1:
         return end
     else:
         return Vector2((start[0] + end[0]) * interpolation, (start[1] + end[1]) * interpolation)

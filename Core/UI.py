@@ -1,9 +1,8 @@
-from Scripts.StateManager import StateManager
 from Core.Essencial import SpriteRenderer, GameObject
 from pygame.surface import Surface
 from pygame.font import Font
 from pygame.sprite import AbstractGroup
-from pygame import Vector2, event, mouse, MOUSEBUTTONUP, image, transform
+from pygame import Vector2, event, mouse, MOUSEBUTTONUP, image
 from typing import Union
 
 class Button(GameObject):
@@ -24,7 +23,7 @@ class Button(GameObject):
     @property
     def textPosition(self) -> Vector2:
         pos = self.__text.render(self.text, True, (0, 0, 0), None).get_rect()
-        return Vector2(self.transform.position[0] + ((self.sprite.size[0] - pos.width) / 2), self.transform.position[1] + ((self.sprite.size[1] - pos.height) / 2))
+        return Vector2(self.components['transform'].position.x + ((self.sprite.size.x - pos.width) / 2), self.components['transform'].position.y + ((self.sprite.size.y - pos.height) / 2))
     def Render(self, color : Union[tuple[float, float, float], tuple[float, float, float, float], list[float]], bgColor : Union[tuple[float, float, float], tuple[float, float, float, float], list[float]] = None) -> Surface:
         return self.__text.render(self.text, True, color, bgColor)
     def OnClick(self):
@@ -32,13 +31,13 @@ class Button(GameObject):
             #if mouse.get_pressed()[0]:
             if e.type == MOUSEBUTTONUP:                     #for some reason this sometimes doesn't works
                 pos = Vector2(mouse.get_pos())
-                if pos.x <= (self.transform.position.x + self.sprite.size.x) and pos.x >= self.transform.position.x and pos.y <= (self.transform.position.y + self.sprite.size.y) and pos.y >= self.transform.position.y:
-                    print(str(pos) + str(self.transform.position) + str(self.transform.position + self.sprite.size))
+                if pos.x <= (self.components['transform'].position.x + self.sprite.size.x) and pos.x >= self.components['transform'].position.x and pos.y <= (self.components['transform'].position.y + self.sprite.size.y) and pos.y >= self.components['transform'].position.y:
+                    print(str(pos) + str(self.components['transform'].position) + str(self.components['transform'].position + self.sprite.size))
                     self.__onClick(self.onClickProps)
     def Update(self, *props):
         if self.__onClick != None:
             self.OnClick()
-        props[0].screen.blit(self.sprite.image, self.transform.position)
+        props[0].screen.blit(self.sprite.image, self.components['transform'].position)
         props[0].screen.blit(self.Render(self.textColor), self.textPosition)
 
 class Text(GameObject):
@@ -54,7 +53,7 @@ class Text(GameObject):
         pos = self.sprite.image.get_rect()
         return Vector2(self.transform.position[0] + ((self.sprite.size[0] - pos.width) / 2), self.transform.position[1] + ((self.sprite.size[1] - pos.height) / 2))
     def Update(self, *props):
-        props[0].screen.blit(self.sprite.image, self.transform.position)
+        props[0].screen.blit(self.sprite.image, self.components['transform'].position)
 
 class Image(GameObject):
     def __init__(self, src, position: Union[list[float], tuple[float, float], Vector2] = ...) -> None:
@@ -62,4 +61,4 @@ class Image(GameObject):
         self.sprite = SpriteRenderer(src = src)
         self.sprite.image = image.load(src)
     def Update(self, *props):
-        props[0].screen.blit(self.sprite.image, self.transform.position)
+        props[0].screen.blit(self.sprite.image, self.components['transform'].position)
